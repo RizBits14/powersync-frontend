@@ -1,0 +1,20 @@
+
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+dist/
+
+# Test and build output
+coverage/
+*.tsbuildinfo
+
+# Lockfile
+package-lock.json
+
+# Generated or vendored UI components
+src/components/ui/**
+src/components/vendor/**
+src/components/generated/**
