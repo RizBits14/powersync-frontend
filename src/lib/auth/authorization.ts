@@ -1,40 +1,17 @@
 import "server-only";
 
-import { z } from "zod";
-
-import { authUserSchema, type AuthUser } from "@/features/auth/schemas/login.schema";
+import type { AuthUser } from "@/features/auth/schemas/login.schema";
 import { ApiError } from "@/lib/api/api-error";
-import { backendRequest } from "@/lib/api/backend-client";
-import { getSessionToken } from "@/lib/auth/session";
+import { getCurrentUser } from "@/lib/auth/current-user";
 
 export type UserRole = AuthUser["role"];
 
-const currentUserResponseSchema = z.object({
-  success: z.literal(true),
-  message: z.string(),
-  data: authUserSchema,
-});
-
 export async function requireAuthorizedUser(allowedRoles: readonly UserRole[]): Promise<AuthUser> {
-  const token = await getSessionToken();
+  const user = await getCurrentUser();
 
-  if (!token) {
+  if (!user) {
     throw new ApiError(401, "Authentication required.");
   }
-
-  const payload = await backendRequest<unknown>("/auth/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const parsed = currentUserResponseSchema.safeParse(payload);
-
-  if (!parsed.success) {
-    throw new ApiError(502, "Invalid authentication response.");
-  }
-
-  const user = parsed.data.data;
 
   if (user.status !== "ACTIVE") {
     throw new ApiError(403, "Your account is not active.");
