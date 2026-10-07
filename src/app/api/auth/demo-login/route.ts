@@ -35,7 +35,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    const credentials = getDemoCredentials(validation.data.role);
+    const { role, next } = validation.data;
+
+    const credentials = getDemoCredentials(role);
 
     const payload = await backendRequest<unknown>("/auth/login", {
       method: "POST",
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
       body: JSON.stringify(credentials),
     });
 
-    return createAuthSuccessResponse(payload);
+    return createAuthSuccessResponse(payload, next);
   } catch (error) {
     const status = error instanceof ApiError ? error.status : 500;
 

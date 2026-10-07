@@ -7,7 +7,12 @@ export const loginSchema = z
   })
   .strict();
 
+export const loginRequestSchema = loginSchema.extend({
+  next: z.string().optional().nullable(),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
+export type LoginRequestInput = z.infer<typeof loginRequestSchema>;
 
 export const authUserSchema = z.object({
   id: z.string(),

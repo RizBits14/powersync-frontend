@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { loginSchema } from "@/features/auth/schemas/login.schema";
+import { loginRequestSchema } from "@/features/auth/schemas/login.schema";
 import { ApiError } from "@/lib/api/api-error";
 import { backendRequest } from "@/lib/api/backend-client";
 import { createAuthSuccessResponse } from "@/lib/auth/auth-response";
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const validation = loginSchema.safeParse(body);
+  const validation = loginRequestSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(
@@ -34,15 +34,20 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { email, password, next } = validation.data;
+
     const payload = await backendRequest<unknown>("/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(validation.data),
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     });
 
-    return createAuthSuccessResponse(payload);
+    return createAuthSuccessResponse(payload, next);
   } catch (error) {
     const status = error instanceof ApiError ? error.status : 500;
 

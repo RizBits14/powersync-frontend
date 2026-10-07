@@ -34,15 +34,19 @@ export async function POST(request: Request) {
   }
 
   try {
+    const { credential, next } = validation.data;
+
     const payload = await backendRequest<unknown>("/auth/google", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(validation.data),
+      body: JSON.stringify({
+        credential,
+      }),
     });
 
-    return createAuthSuccessResponse(payload);
+    return createAuthSuccessResponse(payload, next);
   } catch (error) {
     const status = error instanceof ApiError ? error.status : 500;
 
