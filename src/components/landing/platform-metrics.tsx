@@ -88,16 +88,10 @@ export function PlatformMetrics() {
 
                 <div>
                   <div className="text-3xl font-bold tracking-[-0.04em] text-[var(--ps-text)] sm:text-4xl">
-                    <NumberTicker
-                      value={metric.value}
-                      suffix={metric.suffix}
-                      delay={index * 0.1}
-                    />
+                    <NumberTicker value={metric.value} suffix={metric.suffix} delay={index * 0.1} />
                   </div>
 
-                  <p className="mt-2 text-sm font-bold text-[var(--ps-text)]">
-                    {metric.label}
-                  </p>
+                  <p className="mt-2 text-sm font-bold text-[var(--ps-text)]">{metric.label}</p>
 
                   <p className="mt-1 text-xs leading-5 text-[var(--ps-text-muted)]">
                     {metric.description}
