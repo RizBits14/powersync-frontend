@@ -1,4 +1,4 @@
-import { Activity, ArrowRight } from "lucide-react";
+import { Activity } from "lucide-react";
 
 import { ScrollVelocity } from "@/components/ui/scroll-velocity";
 
@@ -29,11 +29,6 @@ export function OperationalFlowStrip() {
               customers, operators, administrators, incidents, and restoration outcomes.
             </p>
           </div>
-
-          <div className="hidden items-center gap-2 text-sm font-semibold text-[var(--ps-text-muted)] md:flex">
-            Scroll to accelerate
-            <ArrowRight className="size-4" />
-          </div>
         </div>
       </div>
 
@@ -52,12 +47,6 @@ export function OperationalFlowStrip() {
           direction={-1}
           className="text-sm text-[var(--ps-text-soft)] sm:text-base lg:text-lg"
         />
-      </div>
-
-      <div className="mx-auto mt-8 flex w-full max-w-7xl justify-center px-4 sm:px-6 lg:px-8">
-        <p className="max-w-2xl text-center text-sm leading-6 text-[var(--ps-text-muted)]">
-          Scroll faster or reverse direction to see the operational stream respond in real time.
-        </p>
       </div>
     </section>
   );

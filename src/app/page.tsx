@@ -1,3 +1,4 @@
+import { GridVisibilitySection } from "@/components/landing/grid-visibility-section";
 import { HeroSection } from "@/components/landing/hero-section";
 import { OperationalFlowStrip } from "@/components/landing/operational-flow-strip";
 import { PlatformMetrics } from "@/components/landing/platform-metrics";
@@ -13,6 +14,8 @@ export default function HomePage() {
       <PlatformMetrics />
 
       <OperationalFlowStrip />
+
+      <GridVisibilitySection />
     </main>
   );
 }

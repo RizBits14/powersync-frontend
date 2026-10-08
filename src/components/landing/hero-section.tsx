@@ -261,10 +261,6 @@ function WorkflowAccordion() {
     >
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-bold tracking-[0.15em] text-[var(--ps-primary)] uppercase">
-            From report to restoration
-          </p>
-
           <h2 className="mt-1 text-xl font-bold tracking-[-0.03em] text-[var(--ps-text)] sm:text-2xl">
             See how PowerSync works
           </h2>
