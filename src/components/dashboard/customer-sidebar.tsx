@@ -152,7 +152,7 @@ export function CustomerSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-[var(--ps-border)] p-3">
-        <SidebarMenu>
+        <SidebarMenu className="gap-5">
           <SidebarMenuItem>
             <SidebarMenuButton
               className="h-auto min-h-12"
@@ -213,7 +213,7 @@ function NavigationGroup({ label, items, pathname }: NavigationGroupProps) {
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
 
       <SidebarGroupContent>
-        <SidebarMenu>
+        <SidebarMenu className="gap-5">
           {items.map((item) => {
             const Icon = item.icon;
 
