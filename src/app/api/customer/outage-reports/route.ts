@@ -13,6 +13,29 @@ const createOutageReportSchema = z.object({
     .max(500, "Description is too long."),
 });
 
+export async function GET() {
+  try {
+    const data = await authorizedBackendRequest<unknown>(["CUSTOMER"], "/outage-reports/my");
+
+    return NextResponse.json(data);
+  } catch (error) {
+    const status = error instanceof ApiError ? error.status : 500;
+
+    const message =
+      error instanceof ApiError ? error.message : "Unable to load your outage reports.";
+
+    return NextResponse.json(
+      {
+        success: false,
+        message,
+      },
+      {
+        status,
+      },
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: unknown = await request.json();
