@@ -449,8 +449,7 @@ export function LoginForm() {
               delay: 0.8,
               duration: 0.4,
             }}
-          >
-          </motion.div>
+          ></motion.div>
         </Field>
       </FieldGroup>
     </motion.form>
