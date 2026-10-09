@@ -42,6 +42,11 @@ const operationsNavigation = [
     icon: Home,
   },
   {
+    label: "Verified Reports",
+    href: "/operator/outage-reports",
+    icon: ClipboardList,
+  },
+  {
     label: "My Assignments",
     href: "/operator/assignments",
     icon: ClipboardList,
