@@ -18,17 +18,17 @@ interface MutationBody {
 export async function GET() {
   try {
     const [bills, payments, customers] = await Promise.all([
-      authorizedBackendRequest<Envelope<unknown[]>>(["ADMIN"], "/bills?page=1&limit=100", {
+      authorizedBackendRequest<Envelope<unknown[]>>(["ADMIN"], "/bills?page=1&limit=20", {
         method: "GET",
       }),
 
-      authorizedBackendRequest<Envelope<unknown[]>>(["ADMIN"], "/payments?page=1&limit=100", {
+      authorizedBackendRequest<Envelope<unknown[]>>(["ADMIN"], "/payments?page=1&limit=20", {
         method: "GET",
       }),
 
       authorizedBackendRequest<Envelope<unknown[]>>(
         ["ADMIN"],
-        "/admin/users?role=CUSTOMER&page=1&limit=100",
+        "/admin/users?role=CUSTOMER&page=1&limit=20",
         {
           method: "GET",
         },
@@ -37,7 +37,6 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-
       data: {
         bills: bills.data ?? [],
         payments: payments.data ?? [],
@@ -61,11 +60,9 @@ export async function POST(request: NextRequest) {
 
     const payload = await authorizedBackendRequest<unknown>(["ADMIN"], "/bills", {
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify(body.payload),
     });
 
@@ -96,11 +93,9 @@ export async function PATCH(request: NextRequest) {
 
     const payload = await authorizedBackendRequest<unknown>(["ADMIN"], path, {
       method: "PATCH",
-
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify(body.payload),
     });
 

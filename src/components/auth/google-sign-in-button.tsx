@@ -3,12 +3,7 @@
 import { LoaderCircle } from "lucide-react";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface GoogleCredentialResponse {
@@ -18,9 +13,7 @@ interface GoogleCredentialResponse {
 interface GoogleIdentity {
   initialize(options: {
     client_id: string;
-    callback: (
-      response: GoogleCredentialResponse,
-    ) => void;
+    callback: (response: GoogleCredentialResponse) => void;
   }): void;
 
   renderButton(
@@ -52,55 +45,42 @@ interface GoogleSignInButtonProps {
   nextPath?: string;
 }
 
-export function GoogleSignInButton({
-  nextPath,
-}: GoogleSignInButtonProps) {
+export function GoogleSignInButton({ nextPath }: GoogleSignInButtonProps) {
   const router = useRouter();
 
-  const wrapperRef =
-    useRef<HTMLDivElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const buttonRef =
-    useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
 
-  const lastRenderedWidth =
-    useRef<number | null>(null);
+  const lastRenderedWidth = useRef<number | null>(null);
 
-  const [googleReady, setGoogleReady] =
-    useState(false);
+  const [googleReady, setGoogleReady] = useState(false);
 
-  const [submitting, setSubmitting] =
-    useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const clientId =
-    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const handleCredential = useCallback(
-    async (
-      response: GoogleCredentialResponse,
-    ) => {
+    async (response: GoogleCredentialResponse) => {
       setSubmitting(true);
 
       try {
-        const result = await fetch(
-          "/api/auth/google",
-          {
-            method: "POST",
+        const result = await fetch("/api/auth/google", {
+          method: "POST",
 
-            headers: {
-              "Content-Type": "application/json",
-            },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-            body: JSON.stringify({
-              credential: response.credential,
-              ...(nextPath
-                ? {
+          body: JSON.stringify({
+            credential: response.credential,
+            ...(nextPath
+              ? {
                   next: nextPath,
                 }
-                : {}),
-            }),
-          },
-        );
+              : {}),
+          }),
+        });
 
         const payload = (await result.json()) as {
           message?: string;
@@ -109,31 +89,18 @@ export function GoogleSignInButton({
         };
 
         if (!result.ok) {
-          throw new Error(
-            payload.message ??
-            payload.error ??
-            "Google authentication failed.",
-          );
+          throw new Error(payload.message ?? payload.error ?? "Google authentication failed.");
         }
 
-        toast.success(
-          "Signed in with Google successfully.",
-        );
+        toast.success("Signed in with Google successfully.");
 
         const destination =
-          payload.redirectTo ??
-          (nextPath?.startsWith("/dashboard")
-            ? nextPath
-            : "/dashboard");
+          payload.redirectTo ?? (nextPath?.startsWith("/dashboard") ? nextPath : "/dashboard");
 
         router.replace(destination);
         router.refresh();
       } catch (error) {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Google authentication failed.",
-        );
+        toast.error(error instanceof Error ? error.message : "Google authentication failed.");
       } finally {
         setSubmitting(false);
       }
@@ -141,89 +108,69 @@ export function GoogleSignInButton({
     [nextPath, router],
   );
 
-  const renderGoogleButton =
-    useCallback(() => {
-      const google =
-        window.google?.accounts.id;
+  const renderGoogleButton = useCallback(() => {
+    const google = window.google?.accounts.id;
 
-      const wrapper =
-        wrapperRef.current;
+    const wrapper = wrapperRef.current;
 
-      const button =
-        buttonRef.current;
+    const button = buttonRef.current;
 
-      if (
-        !clientId ||
-        !google ||
-        !wrapper ||
-        !button
-      ) {
-        return;
-      }
+    if (!clientId || !google || !wrapper || !button) {
+      return;
+    }
 
-      const availableWidth =
-        wrapper.getBoundingClientRect().width;
+    const availableWidth = wrapper.getBoundingClientRect().width;
 
-      if (availableWidth <= 0) {
-        return;
-      }
+    if (availableWidth <= 0) {
+      return;
+    }
 
-      /*
-       * Google standard buttons support a fixed rendered width.
-       * We recalculate it whenever the parent changes size.
-       *
-       * Desktop: maximum 400px
-       * Tablet/mobile: fills available width
-       */
-      const width = Math.min(
-        Math.floor(availableWidth),
-        400,
-      );
+    /*
+     * Google standard buttons support a fixed rendered width.
+     * We recalculate it whenever the parent changes size.
+     *
+     * Desktop: maximum 400px
+     * Tablet/mobile: fills available width
+     */
+    const width = Math.min(Math.floor(availableWidth), 400);
 
-      if (
-        lastRenderedWidth.current === width
-      ) {
-        return;
-      }
+    if (lastRenderedWidth.current === width) {
+      return;
+    }
 
-      lastRenderedWidth.current = width;
+    lastRenderedWidth.current = width;
 
-      button.replaceChildren();
+    button.replaceChildren();
 
-      google.renderButton(button, {
-        type: "standard",
-        theme: "outline",
-        size: "large",
+    google.renderButton(button, {
+      type: "standard",
+      theme: "outline",
+      size: "large",
 
-        // Force the visible button text to English.
-        locale: "en",
+      // Force the visible button text to English.
+      locale: "en",
 
-        text: "signin_with",
-        shape: "rectangular",
-        logo_alignment: "left",
-        width,
-      });
-    }, [clientId]);
+      text: "signin_with",
+      shape: "rectangular",
+      logo_alignment: "left",
+      width,
+    });
+  }, [clientId]);
 
-  const initializeGoogle =
-    useCallback(() => {
-      const google =
-        window.google?.accounts.id;
+  const initializeGoogle = useCallback(() => {
+    const google = window.google?.accounts.id;
 
-      if (!clientId || !google) {
-        return;
-      }
+    if (!clientId || !google) {
+      return;
+    }
 
-      google.initialize({
-        client_id: clientId,
-        callback: handleCredential,
-      });
+    google.initialize({
+      client_id: clientId,
+      callback: handleCredential,
+    });
 
-      setGoogleReady(true);
-    }, [
-      clientId,
-      handleCredential,
-    ]);
+    setGoogleReady(true);
+  }, [clientId, handleCredential]);
 
   useEffect(() => {
     if (!googleReady) {
@@ -232,27 +179,22 @@ export function GoogleSignInButton({
 
     renderGoogleButton();
 
-    const wrapper =
-      wrapperRef.current;
+    const wrapper = wrapperRef.current;
 
     if (!wrapper) {
       return;
     }
 
-    const resizeObserver =
-      new ResizeObserver(() => {
-        renderGoogleButton();
-      });
+    const resizeObserver = new ResizeObserver(() => {
+      renderGoogleButton();
+    });
 
     resizeObserver.observe(wrapper);
 
     return () => {
       resizeObserver.disconnect();
     };
-  }, [
-    googleReady,
-    renderGoogleButton,
-  ]);
+  }, [googleReady, renderGoogleButton]);
 
   if (!clientId) {
     return (
@@ -263,10 +205,7 @@ export function GoogleSignInButton({
   }
 
   return (
-    <div
-      ref={wrapperRef}
-      className="relative flex w-full justify-center overflow-hidden"
-    >
+    <div ref={wrapperRef} className="relative flex w-full justify-center overflow-hidden">
       <Script
         id="google-identity-services"
         src="https://accounts.google.com/gsi/client?hl=en"
@@ -275,19 +214,14 @@ export function GoogleSignInButton({
       />
 
       <div className="flex w-full max-w-[400px] justify-center">
-        <div
-          ref={buttonRef}
-          className="min-h-11 w-full"
-        />
+        <div ref={buttonRef} className="min-h-11 w-full" />
       </div>
 
       {submitting ? (
         <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/90">
           <LoaderCircle className="size-5 animate-spin text-[var(--ps-primary)]" />
 
-          <span className="ml-2 text-sm font-semibold text-[var(--ps-text)]">
-            Signing in...
-          </span>
+          <span className="ml-2 text-sm font-semibold text-[var(--ps-text)]">Signing in...</span>
         </div>
       ) : null}
     </div>

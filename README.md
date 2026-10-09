@@ -7,6 +7,7 @@ Built as an academic software engineering project, PowerSync features role-based
 ## Key Features
 
 ### Customer
+
 - Email/password authentication and Google Sign-In
 - Customer profile and service area management
 - Submit and track outage reports
@@ -16,6 +17,7 @@ Built as an academic software engineering project, PowerSync features role-based
 - Receive system notifications
 
 ### Operator
+
 - View verified outage reports
 - Group related reports through smart outage clustering
 - Create and manage outage incidents
@@ -24,6 +26,7 @@ Built as an academic software engineering project, PowerSync features role-based
 - Receive operational notifications
 
 ### Administrator
+
 - Review and verify outage reports
 - Manage incidents and assign operators
 - Monitor the restoration workflow
@@ -57,17 +60,17 @@ The system also supports planned interruptions, billing, payment processing, not
 
 ## Technology Stack
 
-| Category | Technologies |
-|---|---|
-| Frontend | Next.js, React, TypeScript |
-| Styling | Tailwind CSS, shadcn/ui |
-| Data & State | TanStack Query, Zustand |
-| Forms & Validation | React Hook Form, Zod |
-| Charts | Recharts |
-| Backend | Express, TypeScript, Prisma |
-| Authentication | JWT-backed sessions, HTTP-only cookies, Google Identity Services |
-| Payments | Stripe Checkout, Stripe Webhooks |
-| Deployment | Vercel |
+| Category           | Technologies                                                     |
+| ------------------ | ---------------------------------------------------------------- |
+| Frontend           | Next.js, React, TypeScript                                       |
+| Styling            | Tailwind CSS, shadcn/ui                                          |
+| Data & State       | TanStack Query, Zustand                                          |
+| Forms & Validation | React Hook Form, Zod                                             |
+| Charts             | Recharts                                                         |
+| Backend            | Express, TypeScript, Prisma                                      |
+| Authentication     | JWT-backed sessions, HTTP-only cookies, Google Identity Services |
+| Payments           | Stripe Checkout, Stripe Webhooks                                 |
+| Deployment         | Vercel                                                           |
 
 ## Application Architecture
 
@@ -160,15 +163,15 @@ Open http://localhost:3000 in your browser.
 
 ## Available Scripts
 
-| Command | Purpose |
-|---|---|
-| `npm run dev` | Start the development server |
-| `npm run format` | Format the codebase |
-| `npm run format:check` | Check code formatting |
-| `npm run typecheck` | Run TypeScript validation |
-| `npm run lint` | Run ESLint |
-| `npm run build` | Create a production build |
-| `npm run start` | Start the production server |
+| Command                | Purpose                      |
+| ---------------------- | ---------------------------- |
+| `npm run dev`          | Start the development server |
+| `npm run format`       | Format the codebase          |
+| `npm run format:check` | Check code formatting        |
+| `npm run typecheck`    | Run TypeScript validation    |
+| `npm run lint`         | Run ESLint                   |
+| `npm run build`        | Create a production build    |
+| `npm run start`        | Start the production server  |
 
 Before deployment, validate the project:
 
