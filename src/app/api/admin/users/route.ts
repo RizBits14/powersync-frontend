@@ -1,33 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { ApiError } from "@/lib/api/api-error";
 import { authorizedBackendRequest } from "@/lib/api/authorized-backend-client";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const query = request.nextUrl.searchParams.toString();
-    const path = `/admin/users${query ? `?${query}` : ""}`;
-
-    const data = await authorizedBackendRequest<unknown>(["ADMIN"], path);
-
-    return NextResponse.json(data, {
-      headers: {
-        "Cache-Control": "no-store",
+    const payload = await authorizedBackendRequest<unknown>(
+      ["ADMIN"],
+      "/admin/users?page=1&limit=100",
+      {
+        method: "GET",
       },
-    });
+    );
+
+    return NextResponse.json(payload);
   } catch (error) {
     const status = error instanceof ApiError ? error.status : 500;
+
+    const message = error instanceof ApiError ? error.message : "Unable to load users.";
 
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof ApiError ? error.message : "Unable to retrieve users.",
+        message,
       },
       {
         status,
-        headers: {
-          "Cache-Control": "no-store",
-        },
       },
     );
   }

@@ -8,6 +8,9 @@ import {
   LoaderCircle,
   LogOut,
   ShieldCheck,
+  ReceiptText,
+  ScrollText,
+  UsersRound,
   Siren,
   Zap,
   Network,
@@ -78,6 +81,21 @@ const adminNavigation = [
     label: "Infrastructure",
     href: "/admin/infrastructure",
     icon: Network,
+  },
+  {
+    label: "Users",
+    href: "/admin/users",
+    icon: UsersRound,
+  },
+  {
+    label: "Billing",
+    href: "/admin/billing",
+    icon: ReceiptText,
+  },
+  {
+    label: "Audit & Broadcasts",
+    href: "/admin/audit",
+    icon: ScrollText,
   },
 ];
 

@@ -13,20 +13,16 @@ const navigationItems = [
     href: "/",
   },
   {
-    label: "Features",
-    href: "/#features",
-  },
-  {
     label: "How It Works",
     href: "/#how-it-works",
   },
   {
-    label: "Reliability",
-    href: "/#reliability",
+    label: "Features",
+    href: "/#features",
   },
   {
-    label: "About",
-    href: "/#about",
+    label: "Reliability",
+    href: "/#reliability",
   },
 ] as const;
 
@@ -178,9 +174,8 @@ function DesktopNavigation({ activeItem, onNavigate }: DesktopNavigationProps) {
             ) : null}
 
             <span
-              className={`relative z-10 transition-colors duration-200 ${
-                isActive ? "text-white" : "text-[var(--ps-text-muted)] hover:text-[var(--ps-text)]"
-              }`}
+              className={`relative z-10 transition-colors duration-200 ${isActive ? "text-white" : "text-[var(--ps-text-muted)] hover:text-[var(--ps-text)]"
+                }`}
             >
               {item.label}
             </span>
@@ -357,11 +352,10 @@ function MobileNavigation({ isOpen, activeItem, onNavigate, onClose }: MobileNav
                     <Link
                       href={item.href}
                       onClick={() => onNavigate(item.label)}
-                      className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)] ${
-                        isActive
+                      className={`flex min-h-11 items-center rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)] ${isActive
                           ? "bg-[var(--ps-primary)] text-white"
                           : "text-[var(--ps-text-muted)] hover:bg-[var(--ps-sage-soft)] hover:text-[var(--ps-text)]"
-                      }`}
+                        }`}
                     >
                       {item.label}
                     </Link>

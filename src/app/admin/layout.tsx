@@ -1,15 +1,17 @@
-import type { CSSProperties, ReactNode } from "react";
-
 import { ShieldCheck } from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { requireAuthorizedUser } from "@/lib/auth/authorization";
 
 interface AdminLayoutProps {
   children: ReactNode;
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default async function AdminLayout({ children }: AdminLayoutProps) {
+  await requireAuthorizedUser(["ADMIN"]);
+
   return (
     <SidebarProvider
       style={

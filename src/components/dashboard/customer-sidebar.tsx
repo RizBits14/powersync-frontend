@@ -3,7 +3,7 @@
 import {
   Bell,
   CalendarDays,
-  CircleGauge,
+  History,
   CreditCard,
   FileClock,
   Home,
@@ -66,11 +66,6 @@ const mainNavigation = [
     href: "/dashboard/schedules",
     icon: CalendarDays,
   },
-  {
-    label: "Reliability",
-    href: "/dashboard/reliability",
-    icon: CircleGauge,
-  },
 ];
 
 const accountNavigation = [
@@ -83,6 +78,11 @@ const accountNavigation = [
     label: "Billing",
     href: "/dashboard/billing",
     icon: CreditCard,
+  },
+  {
+    label: "Payment History",
+    href: "/dashboard/billing/payments",
+    icon: History,
   },
   {
     label: "Profile",
@@ -180,7 +180,7 @@ export function CustomerSidebar() {
               tooltip="Sign out"
               disabled={logoutMutation.isPending}
               onClick={() => logoutMutation.mutate()}
-              className="text-[var(--ps-text-muted)] hover:text-[var(--ps-danger)]"
+              className="cursor-pointer text-[var(--ps-text-muted)] hover:text-[var(--ps-danger)]"
             >
               <LogOut className="size-4" />
 

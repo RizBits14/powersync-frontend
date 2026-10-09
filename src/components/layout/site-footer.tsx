@@ -4,20 +4,16 @@ import Link from "next/link";
 
 const productLinks = [
   {
-    label: "Features",
-    href: "/#features",
-  },
-  {
     label: "How It Works",
     href: "/#how-it-works",
   },
   {
-    label: "Reliability",
-    href: "/#reliability",
+    label: "Features",
+    href: "/#features",
   },
   {
-    label: "About",
-    href: "/about",
+    label: "Reliability",
+    href: "/#reliability",
   },
 ];
 

@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -65,6 +66,7 @@ const demoRoles = [
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+
   const [demoLoadingRole, setDemoLoadingRole] = useState<DemoRole | null>(null);
 
   const shouldReduceMotion = useReducedMotion();
@@ -75,6 +77,7 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
+
     defaultValues: {
       email: "",
       password: "",
@@ -95,9 +98,11 @@ export function LoginForm() {
 
       const response = await fetch("/api/auth/login", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           ...values,
           ...(nextPath ? { next: nextPath } : {}),
@@ -130,9 +135,11 @@ export function LoginForm() {
 
       const response = await fetch("/api/auth/demo-login", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           role,
           ...(nextPath ? { next: nextPath } : {}),
@@ -156,6 +163,8 @@ export function LoginForm() {
       setDemoLoadingRole(null);
     }
   }
+
+  const nextPath = getNextPath();
 
   return (
     <motion.form
@@ -183,7 +192,10 @@ export function LoginForm() {
         <motion.div
           className="flex flex-col gap-2"
           initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
           transition={{
             duration: 0.45,
             delay: 0.1,
@@ -204,7 +216,10 @@ export function LoginForm() {
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
           transition={{
             duration: 0.4,
             delay: 0.2,
@@ -233,7 +248,10 @@ export function LoginForm() {
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
           transition={{
             duration: 0.4,
             delay: 0.27,
@@ -264,7 +282,7 @@ export function LoginForm() {
                       }
                 }
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute top-1/2 right-1 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-[var(--ps-text-muted)] transition-colors hover:bg-[var(--ps-surface-muted)] hover:text-[var(--ps-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)]"
+                className="absolute top-1/2 right-1 flex size-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-[var(--ps-text-muted)] transition-colors hover:bg-[var(--ps-surface-muted)] hover:text-[var(--ps-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)]"
               >
                 {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
               </motion.button>
@@ -280,7 +298,10 @@ export function LoginForm() {
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
           transition={{
             duration: 0.4,
             delay: 0.34,
@@ -306,7 +327,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={isSubmitting || demoLoadingRole !== null}
-                className="min-h-11 w-full bg-[var(--ps-primary)] text-white hover:bg-[var(--ps-primary-hover)]"
+                className="min-h-11 w-full cursor-pointer bg-[var(--ps-primary)] text-white hover:bg-[var(--ps-primary-hover)] disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -339,31 +360,40 @@ export function LoginForm() {
           </Field>
         </motion.div>
 
+        {/* Google authentication */}
         <motion.div
-          initial={shouldReduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
           transition={{
             duration: 0.4,
             delay: 0.42,
           }}
         >
-          <FieldDescription className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="font-semibold text-[var(--ps-primary)] underline-offset-4 hover:underline"
-            >
-              Create account
-            </Link>
-          </FieldDescription>
+          <div className="mb-5 flex items-center gap-3">
+            <div className="h-px flex-1 bg-[var(--ps-border)]" />
+
+            <span className="shrink-0 text-xs font-semibold text-[var(--ps-text-muted)]">
+              or continue with
+            </span>
+
+            <div className="h-px flex-1 bg-[var(--ps-border)]" />
+          </div>
+
+          <GoogleSignInButton nextPath={nextPath ?? undefined} />
         </motion.div>
 
+        {/* Demo accounts */}
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
+          animate={{
+            opacity: 1,
+          }}
           transition={{
             duration: 0.4,
-            delay: 0.48,
+            delay: 0.5,
           }}
         >
           <FieldSeparator>Demo access</FieldSeparator>
@@ -397,7 +427,7 @@ export function LoginForm() {
                   }}
                   transition={{
                     duration: 0.4,
-                    delay: 0.55 + index * 0.07,
+                    delay: 0.57 + index * 0.07,
                   }}
                   whileHover={
                     shouldReduceMotion
@@ -414,7 +444,7 @@ export function LoginForm() {
                           scale: 0.96,
                         }
                   }
-                  className="cursor-pointer group flex min-h-[92px] flex-col items-center justify-center rounded-2xl border border-[var(--ps-border)] bg-[var(--ps-surface)] px-2 py-3 text-center transition-colors duration-200 hover:border-[var(--ps-border-strong)] hover:bg-[var(--ps-background-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)] disabled:pointer-events-none disabled:opacity-60 sm:min-h-[100px]"
+                  className="group flex min-h-[92px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-[var(--ps-border)] bg-[var(--ps-surface)] px-2 py-3 text-center transition-colors duration-200 hover:border-[var(--ps-border-strong)] hover:bg-[var(--ps-background-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ps-primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-[100px]"
                 >
                   <motion.span
                     whileHover={
@@ -441,16 +471,29 @@ export function LoginForm() {
               );
             })}
           </div>
-
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{
-              delay: 0.8,
-              duration: 0.4,
-            }}
-          ></motion.div>
         </Field>
+
+        {/* Registration */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.4,
+            delay: 0.82,
+          }}
+        >
+          <FieldDescription className="text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-[var(--ps-primary)] underline-offset-4 hover:underline"
+            >
+              Create account
+            </Link>
+          </FieldDescription>
+        </motion.div>
       </FieldGroup>
     </motion.form>
   );
@@ -464,8 +507,10 @@ function getRoleHome(role: DemoRole) {
   switch (role) {
     case "ADMIN":
       return "/admin";
+
     case "OPERATOR":
       return "/operator";
+
     case "CUSTOMER":
       return "/dashboard";
   }

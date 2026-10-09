@@ -1,14 +1,17 @@
-import type { CSSProperties, ReactNode } from "react";
 import { ShieldCheck } from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { OperatorSidebar } from "@/components/operator/operator-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { requireAuthorizedUser } from "@/lib/auth/authorization";
 
 interface OperatorLayoutProps {
   children: ReactNode;
 }
 
-export default function OperatorLayout({ children }: OperatorLayoutProps) {
+export default async function OperatorLayout({ children }: OperatorLayoutProps) {
+  await requireAuthorizedUser(["OPERATOR"]);
+
   return (
     <SidebarProvider
       style={
