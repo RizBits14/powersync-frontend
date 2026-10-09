@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Siren,
   Zap,
+  Network,
   CalendarClock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -72,6 +73,11 @@ const adminNavigation = [
     label: "Analytics",
     href: "/admin/analytics",
     icon: BarChart3,
+  },
+  {
+    label: "Infrastructure",
+    href: "/admin/infrastructure",
+    icon: Network,
   },
 ];
 

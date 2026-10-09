@@ -284,7 +284,7 @@ export function OperatorOutageReportsView() {
 
   const totalOutages = reports.filter((report) => report.issueType === "TOTAL_OUTAGE").length;
 
-//   const partialOutages = reports.filter((report) => report.issueType === "PARTIAL_OUTAGE").length;
+  //   const partialOutages = reports.filter((report) => report.issueType === "PARTIAL_OUTAGE").length;
 
   const highPriority = reports.filter(
     (report) => report.area.priority === "HIGH" || report.area.priority === "CRITICAL",
