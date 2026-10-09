@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Ban,
@@ -11,6 +11,7 @@ import {
   FileText,
   Gauge,
   Home,
+  LoaderCircle,
   MapPin,
   ReceiptText,
   RefreshCw,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -72,6 +74,14 @@ interface ElectricityBill {
   customer?: BillCustomer;
 }
 
+interface CheckoutResponse {
+  paymentId: string;
+  sessionId: string;
+  checkoutUrl: string;
+  amount?: number;
+  currency?: string;
+}
+
 class BillRequestError extends Error {
   status: number;
 
@@ -87,6 +97,16 @@ export function CustomerBillDetailView({ billId }: { billId: string }) {
   const billQuery = useQuery({
     queryKey: ["customer", "bill", billId],
     queryFn: () => getBill(billId),
+  });
+
+  const checkoutMutation = useMutation({
+    mutationFn: createCheckout,
+    onSuccess: (checkout) => {
+      window.location.assign(checkout.checkoutUrl);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   if (billQuery.isLoading) {
@@ -165,6 +185,55 @@ export function CustomerBillDetailView({ billId }: { billId: string }) {
         </p>
       </div>
 
+      {bill.status === "UNPAID" ? (
+        <section className="mt-6 flex flex-col gap-4 rounded-3xl border border-[var(--ps-border)] bg-[var(--ps-surface)] p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--ps-warning-soft)] text-[var(--ps-warning)]">
+              <CircleAlert className="size-5" />
+            </div>
+
+            <div>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <h2 className="text-base font-bold text-[var(--ps-text)] sm:text-lg">
+                  Payment due
+                </h2>
+
+                <span className="text-xl font-bold text-[var(--ps-text)] sm:text-2xl">
+                  {formatCurrency(bill.totalAmount, bill.currency)}
+                </span>
+              </div>
+
+              <p className="mt-1 text-sm text-[var(--ps-text-muted)]">
+                Due {formatDate(bill.dueDate)}
+              </p>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            disabled={checkoutMutation.isPending}
+            onClick={() => checkoutMutation.mutate(bill.id)}
+            className="min-h-11 w-full cursor-pointer bg-[var(--ps-primary)] px-6 text-white hover:bg-[var(--ps-primary-hover)] disabled:cursor-not-allowed sm:w-auto"
+          >
+            {checkoutMutation.isPending ? (
+              <>
+                <LoaderCircle className="size-4 animate-spin" />
+                Opening Stripe...
+              </>
+            ) : (
+              <>
+                <CreditCard className="size-4" />
+                Pay BDT{" "}
+                {Number(bill.totalAmount).toLocaleString("en-BD", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </>
+            )}
+          </Button>
+        </section>
+      ) : null}
+
       <div className="mt-7 grid items-start gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
           <section className="rounded-3xl border border-[var(--ps-border)] bg-[var(--ps-surface)] p-5 sm:p-6">
@@ -193,7 +262,8 @@ export function CustomerBillDetailView({ billId }: { billId: string }) {
 
               <div className="mt-3 flex items-center gap-2 text-sm text-[var(--ps-text-soft)]">
                 <Gauge className="size-4 text-[var(--ps-primary)]" />
-                {formatUnits(bill.unitsConsumed)} units consumed
+
+                <span>{formatUnits(bill.unitsConsumed)} units consumed</span>
               </div>
             </div>
 
@@ -470,6 +540,26 @@ async function getBill(billId: string): Promise<ElectricityBill> {
 
   if (!payload.data) {
     throw new BillRequestError(404, "Bill not found.");
+  }
+
+  return payload.data;
+}
+
+async function createCheckout(billId: string): Promise<CheckoutResponse> {
+  const response = await fetch("/api/customer/payments/checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      billId,
+    }),
+  });
+
+  const payload = (await response.json()) as ApiResponse<CheckoutResponse>;
+
+  if (!response.ok || !payload.data?.checkoutUrl) {
+    throw new Error(payload.message ?? payload.error ?? "Unable to start Stripe checkout.");
   }
 
   return payload.data;
