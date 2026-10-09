@@ -1,7 +1,16 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ClipboardList, Gauge, LoaderCircle, LogOut, ShieldCheck, Zap } from "lucide-react";
+import {
+  BarChart3,
+  ClipboardList,
+  Gauge,
+  LoaderCircle,
+  LogOut,
+  ShieldCheck,
+  Siren,
+  Zap,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -47,6 +56,16 @@ const adminNavigation = [
     label: "Outage Reports",
     href: "/admin/outages",
     icon: ClipboardList,
+  },
+  {
+    label: "Incidents",
+    href: "/admin/incidents",
+    icon: Siren,
+  },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
   },
 ];
 
