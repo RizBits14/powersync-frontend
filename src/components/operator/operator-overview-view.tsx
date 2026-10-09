@@ -394,18 +394,6 @@ function MiniMetric({
   );
 }
 
-function WorkflowStep({ number, label }: { number: string; label: string }) {
-  return (
-    <div className="rounded-2xl bg-[var(--ps-background)] p-3 text-center">
-      <div className="mx-auto flex size-7 items-center justify-center rounded-full bg-[var(--ps-primary-soft)] text-xs font-bold text-[var(--ps-primary)]">
-        {number}
-      </div>
-
-      <p className="mt-2 text-xs font-bold text-[var(--ps-text)]">{label}</p>
-    </div>
-  );
-}
-
 function SeverityBadge({ severity }: { severity: string }) {
   const styles: Record<string, string> = {
     LOW: "bg-[var(--ps-success-soft)] text-[var(--ps-success)]",
