@@ -237,6 +237,7 @@ export function OperatorAssignmentsView() {
 
       const searchable = [
         assignment.incident.title,
+        assignment.incident.id,
         assignment.incident.incidentCode,
         assignment.incident.summary,
         assignment.incident.area.name,
